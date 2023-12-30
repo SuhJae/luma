@@ -24,6 +24,12 @@ app.add_middleware(
 
 serviced_language = ["ko", "en", "ja", "zh"]
 
+ui_language = {}
+# read languages from config file
+for lang in serviced_language:
+    with open(f"assets/lang/{lang}.json", "r", encoding="utf-8") as f:
+        ui_language[lang] = f.read()
+
 
 def validate_id(object_id: str) -> Optional[ObjectId]:
     try:
@@ -158,3 +164,20 @@ def random_article(language: str, palace_id: str = None):
         return article
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No article found")
+
+
+@app.get("/api/v1/languages/")
+async def get_languages(language: str):
+    validate_language(language)
+    return ui_language[language], status.HTTP_200_OK
+
+
+@app.get("/api/v1/buildings/")
+async def get_palace_elements(palace_id: str, language: str):
+    validate_language(language)
+    palace_id = validate_palace_id(palace_id)
+    palace_elements = db.get_palace_elements(palace_id, language)
+    if palace_elements:
+        return palace_elements
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No palace elements found")

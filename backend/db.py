@@ -185,6 +185,18 @@ class LumaDB:
         else:
             return None
 
+    def get_palace_elements(self, palace_id: int, language: str) -> Optional[list]:
+        # find all with the same palace_code in the dict of object id and name in the language
+        result = self.palace_db.find({"palace_code": palace_id})
+
+        return_arr = []
+        for palace in result:
+            return_arr.append({
+                "name": palace["name"][language],
+                "id": str(palace["_id"])
+            })
+        return return_arr
+
     def get_palace_random(self, language: str, palace_id: str = None, count: int = 15) -> list[dict]:
         # choose 10 ids from palace_db
         if palace_id:
