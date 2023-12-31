@@ -165,9 +165,10 @@ class LumaDB:
                 raise e
 
     @staticmethod
-    def palace_mongo_to_dict(result: dict, language: str) -> dict:
+    def building_mongo_to_dict(result: dict, language: str) -> dict:
         return {
             "name": result["name"][language],
+            "url": result["url_slug"],
             "explanation": result["explanation"][language],
             "palace_code": result["palace_code"],
             "thumbnail": str(result["thumbnail"]),
@@ -177,11 +178,19 @@ class LumaDB:
             "detail_video": [str(video) for video in result["detail_video"]],
         }
 
-    def get_palace(self, palace_id: ObjectId, language: str) -> Optional[dict]:
+    def get_building(self, palace_id: ObjectId, language: str) -> Optional[dict]:
         result = self.palace_db.find_one({"_id": palace_id})
 
         if result:
-            return self.palace_mongo_to_dict(result, language)
+            return self.building_mongo_to_dict(result, language)
+        else:
+            return None
+
+    def get_building_from_slug(self, slug: str, language: str) -> Optional[dict]:
+        result = self.palace_db.find_one({"url_slug": slug})
+
+        if result:
+            return self.building_mongo_to_dict(result, language)
         else:
             return None
 
@@ -193,11 +202,12 @@ class LumaDB:
         for palace in result:
             return_arr.append({
                 "name": palace["name"][language],
-                "id": str(palace["_id"])
+                "id": str(palace["_id"]),
+                "url": palace["url_slug"]
             })
         return return_arr
 
-    def get_palace_random(self, language: str, palace_id: str = None, count: int = 15) -> list[dict]:
+    def get_building_random(self, language: str, palace_id: str = None, count: int = 15) -> list[dict]:
         # choose 10 ids from palace_db
         if palace_id:
             result = self.palace_db.aggregate(
@@ -213,4 +223,4 @@ class LumaDB:
                 ]
             )
 
-        return [self.palace_mongo_to_dict(palace, language) for palace in result]
+        return [self.building_mongo_to_dict(palace, language) for palace in result]

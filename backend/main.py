@@ -95,13 +95,13 @@ def get_video(video_id: str, language: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Video not found")
 
 
-@app.get("/api/v1/palace/")
+@app.get("/api/v1/building/")
 def get_palace(palace_id: str, language: str):
     validate_language(language)
-    palace_id = validate_id(palace_id)
-    palace = db.get_palace(palace_id, language)
-    if palace:
-        return palace
+    building_id = validate_id(palace_id)
+    building = db.get_building(building_id, language)
+    if building:
+        return building
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Palace not found")
 
@@ -157,9 +157,12 @@ def autocomplete(keyword: str, language: str):
 
 @app.get("/api/v1/random/")
 def random_article(language: str, palace_id: str = None):
-    validate_palace_id(palace_id)
+    if palace_id == "0":
+        palace_id = None
+    if palace_id:
+        validate_palace_id(palace_id)
     validate_language(language)
-    article = db.get_palace_random(language, palace_id)
+    article = db.get_building_random(language, palace_id)
     if article:
         return article
     else:
