@@ -214,15 +214,11 @@ class LumaDB:
             })
         return return_arr
 
-    def get_building_random(self, language: str, palace_id: str = None, count: int = 15) -> list[dict]:
-        # choose 10 ids from palace_db
+    def get_building_random(self, language: str, palace_id: str = None, count: int = 20) -> list[dict]:
         if palace_id:
-            result = self.palace_db.aggregate(
-                [
-                    {"$match": {"palace_code": int(palace_id)}},
-                    {"$sample": {"size": count}},
-                ]
-            )
+            # get all buildings with the same palace_code and sort by detail_code
+            result = self.palace_db.find({"palace_code": int(palace_id)}).sort("detail_code", 1)
+            return [self.building_mongo_to_dict(palace, language) for palace in result]
         else:
             result = self.palace_db.aggregate(
                 [
