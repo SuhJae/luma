@@ -10,5 +10,16 @@
     "jongmyo": "宗廟",
     "searchPlaceholder": "朝鮮の宮殿の中のすべてを検索してみてください。",
     "selectpalace": "宮殿を選択してください",
-    "selectbuilding": "建物を選択してください"
+    "selectbuilding": "建物を選択してください",
+    "photos": "枚の写真",
+    "photos_plural": "枚の写真",
+    "videos": "つの動画",
+    "videos_plural": "つの動画",
+    "minute": "分",
+    "second": "秒",
+    "readingtime": "読む時間",
+    "time": "1分30秒",
+    "quickoverview": "概要",
+    "detail": "詳細説明",
+    "multimedia": "マルチメディア"
 }

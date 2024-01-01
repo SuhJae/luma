@@ -111,9 +111,16 @@ class LumaDB:
     def get_detailed_video(self, video_id: ObjectId, language: str) -> Optional[dict]:
         result = self.media_meta_db.find_one({"_id": video_id})
         if "video" in result:
+            video = str(result["video"][language])
+            # if video is not found, try other languages
+            if video == "None":
+                for lang in ["ko", "en", "ja", "zh"]:
+                    video = str(result["video"][lang])
+                    if video != "None":
+                        break
             return {
                 "name": result["name"][language],
-                "video": str(result["video"][language]),
+                "video": video,
             }
         else:
             return None

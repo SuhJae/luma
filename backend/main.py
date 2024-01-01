@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, Request, HTTPException, status
 from bson.objectid import ObjectId
 import bson.errors
 
@@ -61,16 +61,50 @@ def read_root():
 
 
 @app.get("/api/v1/media/{media_id}")
-def get_media(media_id: str):
+async def get_media(request: Request, media_id: str):
     media_id = validate_id(media_id)
-    media, file_extension = db.get_file(media_id)
-    if media:
-        if file_extension in ["png", "jpg", "jpeg"]:
-            return Response(content=media, media_type=f"image/{file_extension}")
+    try:
+        media, file_extension = db.get_file(media_id)
+    except TypeError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+    if not media:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+    if file_extension in ["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp", "ico"]:
+        return Response(content=media, media_type=f"image/{file_extension}")
+    elif file_extension in ["mp4", "webm", "ogg"]:
+        range_header = request.headers.get('Range')
+        if range_header:
+            return await partial_file_response(media, range_header, f"video/{file_extension}")
         else:
             return Response(content=media, media_type=f"video/{file_extension}")
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media format not supported")
+
+
+async def partial_file_response(data: bytes, range_header: str, media_type: str):
+    start, end = 0, None
+    file_size = len(data)
+
+    if "=" in range_header:
+        _, range_header = range_header.split("=")
+        start, end = range_header.split("-")
+        start = int(start)
+        end = int(end) if end else None
+
+    if end:
+        file_content = data[start:end + 1]
+    else:
+        file_content = data[start:]
+
+    headers = {
+        'Content-Range': f'bytes {start}-{start + len(file_content) - 1}/{file_size}',
+        'Accept-Ranges': 'bytes',
+    }
+
+    return Response(content=file_content, status_code=status.HTTP_206_PARTIAL_CONTENT, media_type=media_type,
+                    headers=headers)
 
 
 @app.get("/api/v1/photo/")
@@ -96,10 +130,22 @@ def get_video(video_id: str, language: str):
 
 
 @app.get("/api/v1/building/")
-def get_palace(palace_id: str, language: str):
+def get_palace(building_id: str, language: str):
     validate_language(language)
-    building_id = validate_id(palace_id)
+    building_id = validate_id(building_id)
     building = db.get_building(building_id, language)
+    if building:
+        return building
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Palace not found")
+
+
+@app.get("/api/v1/buildingurl/")
+def get_palace_url(building_name: str, language: str):
+    validate_language(language)
+    if len(building_name) > 100:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="URL too long")
+    building = db.get_building_from_slug(building_name, language)
     if building:
         return building
     else:
