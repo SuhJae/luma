@@ -46,26 +46,6 @@ def validate_palace_id(palace_id: str) -> Optional[int]:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid palace id")
 
 
-@app.get("/")
-def read_root():
-    return FileResponse('static/index.html')
-
-
-@app.get("/logo.png")
-def read_root():
-    return FileResponse('static/logo.png')
-
-
-@app.get("/sw.js")
-def read_root():
-    return FileResponse('static/sw.js')
-
-
-@app.get("/assets/{file_path:path}")
-def read_assets(file_path: str):
-    return FileResponse(f'static/{file_path}')
-
-
 @app.get("/api/v1/media/{media_id}")
 async def get_media(request: Request, media_id: str):
     media_id = validate_id(media_id)
@@ -236,3 +216,14 @@ async def get_palace_elements(palace_id: str, language: str):
         return palace_elements
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No palace elements found")
+
+
+# SPA catch-all endpoint
+@app.get("/{catchall:path}")
+async def spa_route(catchall: str):
+    # Ignore API paths
+    if catchall.startswith("api/"):
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    # Serve SPA for non-API requests
+    return FileResponse('static/index.html')

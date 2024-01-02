@@ -17,7 +17,11 @@
       }
     </component>
 
-    <meta name="description" content="Find out more about the buildings of the Joseon Dynasty." v-if="buildingSlug === ''"/>
+    <meta name="description" content="Find out more about the buildings of the Joseon Dynasty."
+          v-if="buildingSlug === ''"/>
+
+    <link rel="canonical" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}` + (buildingSlug !== '' ? '/' + buildingSlug : '')"
+          v-if="selectedPalace !== '0'"/>
 
     <!-- Link tags to other pages -->
     <link rel="alternate" hreflang="ko" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}`"
@@ -34,26 +38,27 @@
   <LanguageSelector class="z-[1] lg:z-[3]"/>
   <Navigation class="z-[3]"/>
   <DetailModel :building="buildingSlug" v-if="showDetail" @close="handleDetilClose"/>
-
-  <!-- Landing Page Intro  -->
-  <div class="hero h-[50vh]">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h2 class="text-5xl font-bold mb-4"> {{
-            selectedPalace === '0' ? langData.joseonSpace :
-                palaceDict[selectedPalace]
-          }} </h2>
-        <p class="text-3xl font-semibold"> {{ langData.title }}
-          <span class="mx-2 badge badge-lg badge-primary">
+  <header>
+    <!-- Landing Page Intro  -->
+    <div class="hero h-[50vh]">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h2 class="text-5xl font-bold mb-4"> {{
+              selectedPalace === '0' ? langData.joseonSpace :
+                  palaceDict[selectedPalace]
+            }} </h2>
+          <p class="text-3xl font-semibold"> {{ langData.title }}
+            <span class="mx-2 badge badge-lg badge-primary">
             Alpha
           </span>
-        </p>
+          </p>
+        </div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- Building Feed -->
-  <div class="flex justify-center items-center px-4">
+  <nav class="flex justify-center items-center px-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-screen-lg w-full">
       <div class="card h-80 overflow-hidden bg-base-100 shadow-xl rounded-lg w-full cursor-pointer"
            v-for="building in buildings" :key="building.id"
@@ -64,19 +69,20 @@
                class="w-full h-full object-cover" @load="building.imageLoaded = true">
         </div>
         <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
-          <h4 class="text-lg w-full font-semibold truncate">{{ building.name }}</h4>
+          <h3 class="text-lg w-full font-semibold truncate">{{ building.name }}</h3>
           <div class="h-16">
             <p class="text-sm w-full ellipsis-multi-3">{{ building.explanation }}</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </nav>
 
   <footer class="footer footer-center p-4 mt-12 bg-base-300 text-base-content pb-32">
     <aside>
-      <p>Made with <span class="text-primary">♥</span> by <a href="https://twitter.com/_suhjae" target="_blank" class="link link-primary"
-                           rel="noopener noreferrer">@_SuhJae</a></p>
+      <p>Made with <span class="text-primary">♥</span> by <a href="https://twitter.com/_suhjae" target="_blank"
+                                                             class="link link-primary"
+                                                             rel="noopener noreferrer">@_SuhJae</a></p>
     </aside>
   </footer>
 </template>
@@ -194,7 +200,7 @@ const fetchBuildings = async () => {
     return;
   }
   try {
-    const response = await fetch(window.location.origin + '/api/v1/buildings?palace_id=' + selectedPalace.value + '&language=' + lang.value);
+    const response = await fetch(window.location.origin + '/api/v1/buildings/?palace_id=' + selectedPalace.value + '&language=' + lang.value);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

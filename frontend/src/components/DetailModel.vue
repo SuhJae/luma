@@ -138,80 +138,82 @@
             </div>
           </header>
 
-          <!-- Content -->
-          <article>
-            <h2 class="text-2xl md:text-3xl font-bold pt-0 p-4 md:px-12" v-if="detailImages.length > 0">
-              {{ langData.quickoverview }}
-            </h2>
-            <!-- Additional images and videos -->
-            <div class="carousel carousel-end w-full px-2 md:px-10 overflow-x-scroll overflow-y-visible pb-4"
-                 v-if="detailImages.length > 0">
+          <main>
+            <!-- Content -->
+            <article>
+              <h2 class="text-2xl md:text-3xl font-bold pt-0 p-4 md:px-12" v-if="detailImages.length > 0">
+                {{ langData.quickoverview }}
+              </h2>
+              <!-- Additional images and videos -->
+              <div class="carousel carousel-end w-full px-2 md:px-10 overflow-x-scroll overflow-y-visible pb-4"
+                   v-if="detailImages.length > 0">
 
-              <div class="carousel-item" v-for="image in detailImages" >
-                <section
-                    class="card h-96 overflow-hidden bg-base-100 shadow-md rounded-lg max-w-80 w-[70vw] cursor-pointer mx-2">
-                  <div :class="{ 'skeleton': !image.imageLoaded }" class="w-full h-2/3">
-                    <img :src="'/api/v1/media/' + image.media"
-                         :alt="image.name + '\n' + image.explanation" loading="lazy"
-                         class="w-full h-full object-cover" @load="image.imageLoaded = true">
-                  </div>
-                  <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-lg">
-                    <h3 class="text-lg w-full font-semibold truncate mb-2">{{ image.name }}</h3>
-                    <div class="h-32">
-                      <p class="text-sm w-full ellipsis-multi-6 font-serif font-thin">{{
-                          image.explanation
-                        }}
-                      </p>
+                <div class="carousel-item" v-for="image in detailImages">
+                  <section
+                      class="card h-96 overflow-hidden bg-base-100 shadow-md rounded-lg max-w-80 w-[70vw] cursor-pointer mx-2">
+                    <div :class="{ 'skeleton': !image.imageLoaded }" class="w-full h-2/3">
+                      <img :src="'/api/v1/media/' + image.media"
+                           :alt="image.name + '\n' + image.explanation" loading="lazy"
+                           class="w-full h-full object-cover" @load="image.imageLoaded = true">
                     </div>
-                  </div>
-                </section>
+                    <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-lg">
+                      <h3 class="text-lg w-full font-semibold truncate mb-2">{{ image.name }}</h3>
+                      <div class="h-32">
+                        <p class="text-sm w-full ellipsis-multi-6 font-serif font-thin">{{
+                            image.explanation
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+                </div>
               </div>
-            </div>
 
-            <h2 class="text-2xl md:text-3xl font-bold p-4 md:px-12">
-              {{ langData.detail }}
-            </h2>
+              <h2 class="text-2xl md:text-3xl font-bold p-4 md:px-12">
+                {{ langData.detail }}
+              </h2>
 
-            <div class="px-4 md:px-12" v-if="buildingData.explanation">
-              <p class="font-serif font-thin leading-7 md:leading-9"
-                 v-for="line in buildingData.explanation.split('\n')">
-                {{ line }}
-              </p>
-            </div>
-
-
-            <h2 class="text-2xl md:text-3xl font-bold p-4 md:px-12" v-if="detailVideos.length > 0">
-              {{ langData.multimedia }}
-            </h2>
-
-            <div class="carousel carousel-end w-full px-2 md:px-10 overflow-x-scroll overflow-y-visible pb-4"
-                 v-if="detailVideos.length > 0">
-              <div class="carousel-item" v-for="video in detailVideos" :key="video.video" :id="video.video">
-                <section @mouseover="hover = true" @mouseleave="hover = false"
-                         class="card h-72 overflow-hidden bg-base-100 shadow-md rounded-lg max-w-96 w-[80vw] cursor-pointer mx-2 relative">
-
-                  <!-- Video container with hover effect and fullscreen button -->
-                  <div :class="{ 'skeleton': !video.Loaded }"
-                       class="w-full h-full rounded-box rounded-b-none mb-4 relative">
-                    <video :src="'/api/v1/media/' + video.video" muted autoplay loop
-                           playsinline preload="auto" class="w-full h-7/8 object-cover"
-                           @loadedmetadata="video.Loaded = true" ref="videoPlayer"></video>
-
-                    <!-- Fullscreen button -->
-                    <button @click="toggleFullscreen(video.video)"
-                            class="absolute top-0 right-0 m-2 btn btn-circle btn-sm">
-                      <ArrowsPointingOutIcon class="w-5 h-auto"/>
-                    </button>
-
-                  </div>
-
-                  <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
-                    <h3 class="text-lg w-full font-semibold truncate">{{ video.name }}</h3>
-                  </div>
-                </section>
+              <div class="px-4 md:px-12" v-if="buildingData.explanation">
+                <p class="font-serif font-thin leading-7 md:leading-9"
+                   v-for="line in buildingData.explanation.split('\n')">
+                  {{ line }}
+                </p>
               </div>
-            </div>
-          </article>
+
+
+              <h2 class="text-2xl md:text-3xl font-bold p-4 md:px-12" v-if="detailVideos.length > 0">
+                {{ langData.multimedia }}
+              </h2>
+
+              <div class="carousel carousel-end w-full px-2 md:px-10 overflow-x-scroll overflow-y-visible pb-4"
+                   v-if="detailVideos.length > 0">
+                <div class="carousel-item" v-for="video in detailVideos" :key="video.video" :id="video.video">
+                  <section @mouseover="hover = true" @mouseleave="hover = false"
+                           class="card h-72 overflow-hidden bg-base-100 shadow-md rounded-lg max-w-96 w-[80vw] cursor-pointer mx-2 relative">
+
+                    <!-- Video container with hover effect and fullscreen button -->
+                    <div :class="{ 'skeleton': !video.Loaded }"
+                         class="w-full h-full rounded-box rounded-b-none mb-4 relative">
+                      <video :src="'/api/v1/media/' + video.video" muted autoplay loop
+                             playsinline preload="auto" class="w-full h-7/8 object-cover"
+                             @loadedmetadata="video.Loaded = true" ref="videoPlayer"></video>
+
+                      <!-- Fullscreen button -->
+                      <button @click="toggleFullscreen(video.video)"
+                              class="absolute top-0 right-0 m-2 btn btn-circle btn-sm">
+                        <ArrowsPointingOutIcon class="w-5 h-auto"/>
+                      </button>
+
+                    </div>
+
+                    <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
+                      <h3 class="text-lg w-full font-semibold truncate">{{ video.name }}</h3>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </article>
+          </main>
           <div class=" h-10"></div>
         </div>
       </transition>
