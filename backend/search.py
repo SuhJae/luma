@@ -193,17 +193,17 @@ class ElasticsearchClient:
 
 if __name__ == "__main__":
     es = ElasticsearchClient()
-    # es.setup_index()
-    # es.index_all_articles()
+    es.setup_index()
+    es.index_all_articles()
 
-    testing_lang = "en"
-    testing_query = input("Search for: ")
-    result = es.search_article(query=testing_query, language=testing_lang)
-
-    print(f"Found {result['hits']['total']['value']} results")
-
-    for hit in result['hits']['hits']:
-        print(hit['_source']['title'])
-        print(f"Score: {hit['_score']}")
-        print(hit['_source']['text'][:200] + "...")
-        print()
+    # testing_lang = "en"
+    # testing_query = input("Search for: ")
+    # result = es.search_article(query=testing_query, language=testing_lang)
+    #
+    # print(f"Found {result['hits']['total']['value']} results")
+    #
+    # for hit in result['hits']['hits']:
+    #     print(hit['_source']['title'])
+    #     print(f"Score: {hit['_score']}")
+    #     print(hit['_source']['text'][:200] + "...")
+    #     print()

@@ -17,34 +17,37 @@
       }
     </component>
 
+    <meta name="description" content="Find out more about the buildings of the Joseon Dynasty." v-if="buildingSlug === ''"/>
+
     <!-- Link tags to other pages -->
     <link rel="alternate" hreflang="ko" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}`"
-      v-if="selectedPalace !== '0' && lang !== 'ko' && buildingSlug === ''" />
+          v-if="selectedPalace !== '0' && lang !== 'ko' && buildingSlug === ''"/>
     <link rel="alternate" hreflang="en" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}`"
-      v-if="selectedPalace !== '0' && lang !== 'en' && buildingSlug === ''" />
+          v-if="selectedPalace !== '0' && lang !== 'en' && buildingSlug === ''"/>
     <link rel="alternate" hreflang="ja" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}`"
-      v-if="selectedPalace !== '0' && lang !== 'ja' && buildingSlug === ''" />
+          v-if="selectedPalace !== '0' && lang !== 'ja' && buildingSlug === ''"/>
     <link rel="alternate" hreflang="zh" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}`"
-      v-if="selectedPalace !== '0' && lang !== 'zh' && buildingSlug === ''" />
+          v-if="selectedPalace !== '0' && lang !== 'zh' && buildingSlug === ''"/>
   </teleport>
 
 
-  <LanguageSelector class="z-[1] lg:z-[3]" />
-  <Navigation class="z-[3]" />
-  <DetailModel :building="buildingSlug" v-if="showDetail" @close="handleDetilClose" />
+  <LanguageSelector class="z-[1] lg:z-[3]"/>
+  <Navigation class="z-[3]"/>
+  <DetailModel :building="buildingSlug" v-if="showDetail" @close="handleDetilClose"/>
 
   <!-- Landing Page Intro  -->
   <div class="hero h-[50vh]">
     <div class="hero-content text-center">
       <div class="max-w-md">
-        <h1 class="text-5xl font-bold mb-4"> {{ selectedPalace === '0' ? langData.joseonSpace :
-          palaceDict[selectedPalace]
-        }} </h1>
-        <h3 class="text-3xl font-semibold"> {{ langData.title }}
-          <div class="mx-2 badge badge-lg badge-primary">
+        <h2 class="text-5xl font-bold mb-4"> {{
+            selectedPalace === '0' ? langData.joseonSpace :
+                palaceDict[selectedPalace]
+          }} </h2>
+        <p class="text-3xl font-semibold"> {{ langData.title }}
+          <span class="mx-2 badge badge-lg badge-primary">
             Alpha
-          </div>
-        </h3>
+          </span>
+        </p>
       </div>
     </div>
   </div>
@@ -53,14 +56,15 @@
   <div class="flex justify-center items-center px-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-screen-lg w-full">
       <div class="card h-80 overflow-hidden bg-base-100 shadow-xl rounded-lg w-full cursor-pointer"
-        v-for="building in buildings" :key="building.id" @click="showBuildingDetail(building.url, building.palace_code)"
-        @click.prevent>
-        <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3" loading="lazy">
-          <img :src="apiOrigin + 'api/v1/media/' + building.thumbnail" :alt="building.name" loading="lazy"
-            class="w-full h-full object-cover" @load="building.imageLoaded = true">
+           v-for="building in buildings" :key="building.id"
+           @click="showBuildingDetail(building.url, building.palace_code)"
+           @click.prevent>
+        <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3">
+          <img :src="'/api/v1/media/' + building.thumbnail" :alt="building.name" loading="lazy"
+               class="w-full h-full object-cover" @load="building.imageLoaded = true">
         </div>
         <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
-          <h3 class="text-lg w-full font-semibold truncate">{{ building.name }}</h3>
+          <h4 class="text-lg w-full font-semibold truncate">{{ building.name }}</h4>
           <div class="h-16">
             <p class="text-sm w-full ellipsis-multi-3">{{ building.explanation }}</p>
           </div>
@@ -71,22 +75,14 @@
 
   <footer class="footer footer-center p-4 mt-12 bg-base-300 text-base-content pb-32">
     <aside>
-      <p>Made with ❤ by <a href="https://twitter.com/_suhjae" target="_blank" class="link link-primary"
-          rel="noopener noreferrer">@_SuhJae</a></p>
+      <p>Made with <span class="text-primary">♥</span> by <a href="https://twitter.com/_suhjae" target="_blank" class="link link-primary"
+                           rel="noopener noreferrer">@_SuhJae</a></p>
     </aside>
   </footer>
 </template>
 
 
 <style>
-.ellipsis-multi-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .ellipsis-multi-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -110,14 +106,11 @@ import LanguageSelector from './components/LanguageSelector.vue';
 import Navigation from './components/Navigation.vue';
 import DetailModel from './components/DetailModel.vue';
 
-import { provide, ref, computed, watch, onMounted } from 'vue';
-import axios from 'axios';
+import {provide, ref, computed, watch, onMounted} from 'vue';
+import {useLanguageStore} from './store/languageStore';
+import {themeChange} from 'theme-change'
 
-import { useLanguageStore } from './store/languageStore';
-import { themeChange } from 'theme-change'
-
-const { lang, langData, changeLanguage } = useLanguageStore();
-const apiOrigin = "http://127.0.0.1:8000/"
+const {lang, langData, changeLanguage} = useLanguageStore();
 const buildings = ref([]);
 const showDetail = ref(false);
 const buildingSlug = ref('');
@@ -143,18 +136,18 @@ const palaceURL = {
 
 const fetchRandom = async () => {
   try {
-    const response = await axios.get(apiOrigin + "api/v1/random/", {
-      params: {
-        language: lang.value,
-        palace_id: selectedPalace.value,
-      }
-    });
-    buildings.value = response.data;
+    const response = await fetch(window.location.origin + "/api/v1/random/?language=" + lang.value + "&palace_id=" + selectedPalace.value);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json(); // Correctly parsing JSON
+    buildings.value = data;
   } catch (error) {
-    console.error(error);
+    console.error("Error in fetchRandom:", error);
   }
   updateTitle();
 }
+
 
 const showBuildingDetail = (Slug, palaceCode) => {
   console.log("Show Building Detail (Slug: " + Slug + ", Palace Code: " + palaceCode + ")");
@@ -187,34 +180,32 @@ const handleDetilClose = () => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, err => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
+        .then(registration => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, err => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
   });
 }
 
-
 const fetchBuildings = async () => {
-  if (selectedPalace.value == '0') {
+  if (selectedPalace.value === '0') {
     buildingsArray.value = [];
     return;
   }
   try {
-    const response = await axios.get(apiOrigin + "api/v1/buildings/", {
-      params: {
-        language: lang.value,
-        palace_id: selectedPalace.value
-      }
-    });
-    buildingsArray.value = response.data;
+    const response = await fetch(window.location.origin + '/api/v1/buildings?palace_id=' + selectedPalace.value + '&language=' + lang.value);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    buildingsArray.value = data;
+    console.log("Buildings Array:", buildingsArray.value);
     selectedBuilding.value = buildingsArray.value.findIndex(item => item.url === buildingSlug.value);
   } catch (error) {
-    console.error(error);
+    console.error("Error in fetchBuildings:", error);
   }
-}
-
+};
 
 const parseUrl = async (saveHistory = true) => {
   const url = window.location.pathname;
@@ -237,7 +228,7 @@ const parseUrl = async (saveHistory = true) => {
   if (!saveHistory) {
     window.history.replaceState({}, '', url);
   }
-  fetchRandom();
+  await fetchRandom();
 }
 
 const updateTitle = () => {
@@ -275,7 +266,7 @@ window.addEventListener('popstate', () => {
   parseUrl(false);
 });
 
-watch([selectedPalace, lang], fetchBuildings, { immediate: true });
+watch([selectedPalace, lang], fetchBuildings, {immediate: true});
 
 // ========== Theme Management ==========
 const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -298,7 +289,6 @@ parseUrl();
 provide('lang', lang);
 provide('langData', langData);
 provide('changeLanguage', changeLanguage);
-provide('apiOrigin', apiOrigin);
 provide('palaceDict', palaceDict);
 provide('palaceURL', palaceURL);
 provide('selectedPalace', selectedPalace);

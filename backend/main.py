@@ -3,32 +3,23 @@ from bson.objectid import ObjectId
 import bson.errors
 
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, Response, JSONResponse
 
 from typing import Optional
 from db import LumaDB
 from search import ElasticsearchClient
+import json
 
 db = LumaDB()
 es = ElasticsearchClient(lumaBD=db)
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
+app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
 
 serviced_language = ["ko", "en", "ja", "zh"]
-
 ui_language = {}
-# read languages from config file
 for lang in serviced_language:
     with open(f"assets/lang/{lang}.json", "r", encoding="utf-8") as f:
-        ui_language[lang] = f.read()
+        ui_language[lang] = json.load(f)
 
 
 def validate_id(object_id: str) -> Optional[ObjectId]:
@@ -58,6 +49,21 @@ def validate_palace_id(palace_id: str) -> Optional[int]:
 @app.get("/")
 def read_root():
     return FileResponse('static/index.html')
+
+
+@app.get("/logo.png")
+def read_root():
+    return FileResponse('static/logo.png')
+
+
+@app.get("/sw.js")
+def read_root():
+    return FileResponse('static/sw.js')
+
+
+@app.get("/assets/{file_path:path}")
+def read_assets(file_path: str):
+    return FileResponse(f'static/{file_path}')
 
 
 @app.get("/api/v1/media/{media_id}")
@@ -218,7 +224,7 @@ def random_article(language: str, palace_id: str = None):
 @app.get("/api/v1/languages/")
 async def get_languages(language: str):
     validate_language(language)
-    return ui_language[language], status.HTTP_200_OK
+    return JSONResponse(content=ui_language[language], status_code=status.HTTP_200_OK)
 
 
 @app.get("/api/v1/buildings/")

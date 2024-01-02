@@ -1,7 +1,4 @@
-import { reactive, ref, onMounted } from 'vue';
-import axios from 'axios';
-
-const apiOrigin = "http://127.0.0.1:8000/"
+import {reactive, ref, onMounted} from 'vue';
 
 export const useLanguageStore = () => {
     const lang = ref('en');
@@ -33,21 +30,22 @@ export const useLanguageStore = () => {
     // Function to fetch language configuration
     const fetchLanguageConfig = async () => {
         try {
-            console.log("Fetching language config: " + lang.value);
-            const response = await axios.get(apiOrigin + "api/v1/languages/", { params: { language: lang.value } });
-            const responseData = JSON.parse(response.data[0]); // Parse the JSON string
-            Object.assign(langData, responseData);
+            const response = await fetch('/api/v1/languages/?language=' + lang.value);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const responseData = await response.json(); // Parsing the JSON response
+            Object.assign(langData, responseData); // Correctly updating langData with parsed JSON
+            console.log("Language config:", langData);
         } catch (error) {
             console.error("Error fetching language config:", error);
         }
-    }
+    };
 
     // Function to save language to local storage
     const saveLanguageToLocalStorage = (language) => {
         localStorage.setItem('userLanguage', language);
     }
-
-
     const changeLanguage = (newLang) => {
         if (newLang !== lang.value) {
             lang.value = newLang;
@@ -66,6 +64,5 @@ export const useLanguageStore = () => {
         }
         fetchLanguageConfig();
     });
-
-    return { lang, langData, changeLanguage, detectBrowserLanguage, fetchLanguageConfig };
+    return {lang, langData, changeLanguage, detectBrowserLanguage, fetchLanguageConfig};
 };
