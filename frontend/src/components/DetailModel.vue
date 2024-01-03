@@ -190,7 +190,6 @@
                 <div class="carousel-item" v-for="video in detailVideos" :key="video.video" :id="video.video">
                   <section @mouseover="hover = true" @mouseleave="hover = false"
                            class="card h-72 overflow-hidden bg-base-100 shadow-md rounded-lg max-w-96 w-[80vw] cursor-pointer mx-2 relative">
-
                     <!-- Video container with hover effect and fullscreen button -->
                     <div :class="{ 'skeleton': !video.Loaded }"
                          class="w-full h-full rounded-box rounded-b-none mb-4 relative">
@@ -199,13 +198,11 @@
                              @loadedmetadata="video.Loaded = true" ref="videoPlayer"></video>
 
                       <!-- Fullscreen button -->
-                      <button @click="toggleFullscreen(video.video)"
+                      <button @click="toggleFullscreen(video.video)" aria-label="Toggle video fullscreen"
                               class="absolute top-0 right-0 m-2 btn btn-circle btn-sm">
                         <ArrowsPointingOutIcon class="w-5 h-auto"/>
                       </button>
-
                     </div>
-
                     <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
                       <h3 class="text-lg w-full font-semibold truncate">{{ video.name }}</h3>
                     </div>
@@ -377,7 +374,7 @@ const handleKeyDown = (event) => {
 
 const handleFullscreenChange = () => {
   if (!document.fullscreenElement && playing_video.value) {
-    const videoElement = document.getElementById(playing_video.value)?.querySelector('video');
+    const videoElement = videoPlayer.value;
     if (videoElement) videoElement.muted = true;
     playing_video.value = '';
   }
@@ -392,7 +389,7 @@ const exitFullscreen = () => {
 };
 
 watch(playing_video, (videoId) => {
-  const videoElement = document.getElementById(videoId)?.querySelector('video');
+  const videoElement = videoPlayer.value;
   if (!videoElement) return;
   if (videoId && !document.fullscreenElement) {
     enterFullscreen(videoElement);
@@ -403,24 +400,14 @@ watch(playing_video, (videoId) => {
   }
 });
 
-const updateMeta = () => {
-  let sufix = ' (' + palaceDict.value[selectedPalace.value] + ') - ' + langData.title;
-  document.title = buildingData.value.name + sufix;
-}
-
 const toggleFullscreen = (videoId) => {
-  if (playing_video.value === videoId) {
-    playing_video.value = '';
-  } else {
-    playing_video.value = videoId;
-  }
+  playing_video.value = playing_video.value === videoId ? '' : videoId;
 };
 
 onMounted(() => {
   showDetail.value = true;
   window.addEventListener('keydown', handleKeyDown);
   document.addEventListener('fullscreenchange', handleFullscreenChange);
-
   watch([lang, buildingSlug], fetchBuildingData);
   watch(selectedPalace, closeDetail);
   watch([buildingData, lang, selectedPalace], updateMeta);

@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed inset-x-0 bottom-0 pb-10 flex justify-center px-2">
+  <nav class="fixed inset-x-0 bottom-0 pb-4 md:pb-8 flex justify-center px-2">
     <div
         class="flex min-w-fit max-w-screen rounded-full px-1 h-14 items-center bg-base-200 drop-shadow-lg backdrop-blur-md bg-opacity-80 bouncy-transition"
         :class="(isSearchExpanded) ? 'w-[35rem]' : 'w-1'">
