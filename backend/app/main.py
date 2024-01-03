@@ -45,16 +45,6 @@ def validate_palace_id(palace_id: str) -> Optional[int]:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid palace id")
 
 
-@app.get("/sw.js")
-async def get_sw():
-    return FileResponse('app/static/sw.js')
-
-
-@app.get("/logo.png")
-async def get_logo():
-    return FileResponse('app/static/logo.png')
-
-
 @app.get("/api/v1/media/{media_id}")
 async def get_media(request: Request, media_id: str):
     media_id = validate_id(media_id)
@@ -233,6 +223,11 @@ async def spa_route(catchall: str):
     # Ignore API paths
     if catchall.startswith("api/"):
         raise HTTPException(status_code=404, detail="Not Found")
+    # provide logo.png and sw.js
+    elif catchall == "logo.png":
+        return FileResponse('app/static/logo.png')
+    elif catchall == "sw.js":
+        return FileResponse('app/static/sw.js')
 
     # Serve SPA for non-API requests
     return FileResponse('app/static/index.html')
