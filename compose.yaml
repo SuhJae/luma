@@ -1,4 +1,29 @@
 services:
+  traefik:
+    image: traefik:v2.5
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acme.dnschallenge=true
+      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.myresolver.acme.email=j@suhjae.dev
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+    environment:
+      - CF_API_EMAIL=j@suhjae.dev
+      - CF_API_KEY=BXHd7caC2KF9J8ZctalN3uFM4rof5K5c6oq9IRUX
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - web
+      - internal
+
   mongo:
     image: mongo
     ports:
@@ -7,6 +32,8 @@ services:
       - "27017"
     volumes:
       - mongo-db:/data/db
+    networks:
+      - internal
 
   elasticsearch:
     build:
@@ -21,6 +48,38 @@ services:
       - "9200"
     volumes:
       - es-db:/usr/share/elasticsearch/data
+    networks:
+      - internal
+
+  fastapi:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fastapi.rule=Host(`luma.joseon.space`)
+      - traefik.http.routers.fastapi.entrypoints=websecure
+      - traefik.http.routers.fastapi.tls.certresolver=myresolver
+    ports:
+      - "8000:8000" # DEVELOPMENT ONLY
+    expose:
+      - "8000"
+    depends_on:
+      - mongo
+      - elasticsearch
+    volumes:
+      - ./backend:/app
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/luma
+      - ELASTICSEARCH_URI=http://elasticsearch:9200
+    networks:
+      - internal
+
+networks:
+  web:
+    external: true
+  internal:
+    name: internal
 
 volumes:
   mongo-db:

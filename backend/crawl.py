@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from kheritageapi.palace import PalaceSearcher, PalaceInfo
 from kheritageapi.models import PalaceCode
-from db import LumaDB
+from app.db import LumaDB
 
 db = LumaDB()
 palaces = [PalaceCode.GYEONGBOKGUNG, PalaceCode.CHANGDEOKGUNG, PalaceCode.CHANGGYEONGGUNG, PalaceCode.DEOKSUGUNG, PalaceCode.JONGMYO]

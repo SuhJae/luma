@@ -1,2 +1,3 @@
 .idea/
-backend/sync_lang.py
+backend/app/sync_lang.py
+/tools/backup/
