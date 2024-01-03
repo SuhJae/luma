@@ -1,0 +1,1 @@
+.bounce-enter-active{transition:all .3s cubic-bezier(.7,.14,.37,.93)}.bounce-leave-active{transition:all .3s cubic-bezier(.14,.74,.63,1.08)}.bounce-enter-from,.bounce-leave-to{transform:translateY(100vh);opacity:0}.opacity-enter-active,.opacity-leave-active{transition:opacity .3s ease-in-out}.opacity-enter-from,.opacity-leave-to{opacity:0}

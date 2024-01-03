@@ -228,6 +228,10 @@ async def spa_route(catchall: str):
         return FileResponse('app/static/logo.png')
     elif catchall == "sw.js":
         return FileResponse('app/static/sw.js')
+    elif catchall == "robots.txt":
+        return FileResponse('app/static/robots.txt')
+    elif catchall == "font.css":
+        return FileResponse('app/static/font.css')
 
     # Serve SPA for non-API requests
     return FileResponse('app/static/index.html')

@@ -14,7 +14,7 @@
         </div>
       </div>
       <button class="flex-none btn btn-ghost btn-circle p-0 m-0" v-show="!isSearchExpanded" @click="home();">
-        <img src="../assets/logo.png" alt="Joseon Space" class="w-6 h-auto">
+        <img src="../assets/logo.png" alt="Joseon Space" class="w-6 h-6">
       </button>
       <!-- Breadcrumb items -->
       <div class="flex-none w-5 h-5" v-show="!isSearchExpanded">
@@ -22,15 +22,12 @@
       </div>
       <div class="flex-1" v-show="!isSearchExpanded">
         <div class="flex-none dropdown dropdown-top">
-          <div tabindex="1" role="button" class="btn btn-ghost rounded-full px-2">
-            <p
-                class="text-sm font-normal overflow-hidden whitespace-nowrap overflow-ellipsis max-w-[21vw] underline">
+          <div tabindex="0" role="button" class="btn btn-ghost rounded-full px-2">
+            <p class="text-sm font-normal overflow-hidden whitespace-nowrap overflow-ellipsis max-w-[21vw] underline">
               {{ selectedPalace === '0' ? langData.selectpalace : palaceDict[selectedPalace] }}
             </p>
           </div>
-          <div
-              class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200"
-              tabindex="1">
+          <div class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200" tabindex="0">
             <li v-for="(item, key) in palaceDict" :key="key" class="max-w-52">
               <a @click=changePalace(key) :href="palaceURL[key] + '/'" @click.prevent>
                 {{ item }}
@@ -44,15 +41,12 @@
       </div>
       <div class="flex-1" v-show="!isSearchExpanded && selectedPalace !== '0'">
         <div class="flex-none dropdown dropdown-top dropdown-end">
-          <div tabindex="2" role="button" class="btn btn-ghost rounded-full px-2">
-            <p
-                class="text-sm font-normal overflow-hidden whitespace-nowrap overflow-ellipsis max-w-[21vw] underline">
+          <div tabindex="0" role="button" class="btn btn-ghost rounded-full px-2">
+            <p class="text-sm font-normal overflow-hidden whitespace-nowrap overflow-ellipsis max-w-[21vw] underline">
               {{ selectedBuilding === -1 ? langData.selectbuilding : buildingsArray[selectedBuilding].name }}
             </p>
           </div>
-          <div
-              class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200"
-              tabindex="2">
+          <div class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200" tabindex="0">
             <li v-for="(item, i) in buildingsArray" :key="i" class="max-w-52">
               <a @click="changeBuilding(i)" :href="palaceURL[selectedPalace] + '/' + item.url + '/'" @click.prevent>
                 {{ item.name }}
@@ -63,7 +57,7 @@
       </div>
       <div class="flex-1 w-fit">
         <!-- Normal Search Button -->
-        <button class="btn btn-ghost btn-circle px-3" v-show="!isSearchExpanded" @click="openSearch">
+        <button class="btn btn-ghost btn-circle px-3" v-show="!isSearchExpanded" @click="openSearch" aria-label="Open search">
           <MagnifyingGlassIcon class="w-6 h-6"/>
         </button>
         <!-- Expanded Search Input -->
@@ -73,7 +67,7 @@
                    autocomplete="off" @keydown.enter="commitSearch" :placeholder="langData.searchPlaceholder"
                    id="search" @input="searchPreview" :value="searchValue">
             <MagnifyingGlassIcon class="w-6 h-6 absolute left-2"/>
-            <button class="btn btn-ghost btn-circle px-3" @click="closeSearch">
+            <button class="btn btn-ghost btn-circle px-3" @click="closeSearch" aria-label="Close search">
               <XMarkIcon class="w-6 h-6"/>
             </button>
           </div>
