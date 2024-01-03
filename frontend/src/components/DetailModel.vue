@@ -59,7 +59,7 @@
       },{
       "@type": "ListItem",
       "position": 3,
-      "name": "{{ building }}",
+      "name": "{{ building }}"
       }]
       }
     </component>
