@@ -27,8 +27,8 @@ services:
 
   mongo:
     image: mongo
-#    ports:
-#      - "27017:27017" # DEVELOPMENT ONLY
+    ports:
+      - "27017:27017" # DEVELOPMENT ONLY
     expose:
       - "27017"
     volumes:
