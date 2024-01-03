@@ -1,9 +1,10 @@
+version: "3.7"
+
 services:
   traefik:
     image: traefik:v2.5
     command:
       - --api.insecure=true
-      - --api.dashboard=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
@@ -14,7 +15,7 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     environment:
       - CF_API_EMAIL=j@suhjae.dev
-      - CF_API_KEY=W__3cG9S_H2dBXq56GAO0Kvo8jjGt5q_P_8qr0oT
+      - CF_API_KEY=your-cloudflare-api-key
     ports:
       - "80:80"
       - "443:443"
@@ -23,7 +24,6 @@ services:
       - ./letsencrypt:/letsencrypt
     networks:
       - web
-    restart: always
 
   mongo:
     image: mongo
@@ -64,8 +64,6 @@ services:
       - traefik.http.routers.fastapi.entrypoints=websecure
       - traefik.http.routers.fastapi.tls=true
       - traefik.http.routers.fastapi.tls.certresolver=myresolver
-    ports:
-      - "8000:8000" # DEVELOPMENT ONLY
     expose:
       - "8000"
     depends_on:
