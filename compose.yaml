@@ -33,9 +33,9 @@ services:
       - "27017"
     volumes:
       - mongo-db:/data/db
-    restart: always
     networks:
       - web
+    restart: always
 
   elasticsearch:
     build:
@@ -50,9 +50,9 @@ services:
       - "9200"
     volumes:
       - es-db:/usr/share/elasticsearch/data
-    restart: always
     networks:
       - web
+    restart: always
 
   fastapi:
     build:
@@ -77,9 +77,9 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017/luma
       - ELASTICSEARCH_URI=http://elasticsearch:9200
-    restart: always
     networks:
       - web
+    restart: always
 
 networks:
   web:
