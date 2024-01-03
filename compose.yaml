@@ -71,6 +71,7 @@ services:
     depends_on:
       - mongo
       - elasticsearch
+      - traefik
     volumes:
       - ./backend:/app
     environment:
