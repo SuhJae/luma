@@ -15,7 +15,7 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     environment:
       - CF_API_EMAIL=j@suhjae.dev
-      - CF_API_KEY=your-cloudflare-api-key
+      - CF_API_KEY=Z7P_JDB6PX3gtqz-nZSAP_WsYPPGPqwbxi3t69LO
     ports:
       - "80:80"
       - "443:443"
