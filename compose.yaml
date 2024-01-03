@@ -2,8 +2,8 @@ services:
   traefik:
     image: traefik:v2.5
     command:
-      - --api.insecure=true
-      - --api.dashboard=true
+      - --api.insecure=false
+      - --api.dashboard=false
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
@@ -24,7 +24,6 @@ services:
       - ./letsencrypt:/letsencrypt
     networks:
       - web
-      - internal
 
   mongo:
     image: mongo
@@ -35,7 +34,7 @@ services:
     volumes:
       - mongo-db:/data/db
     networks:
-      - internal
+      - web
 
   elasticsearch:
     build:
@@ -51,7 +50,7 @@ services:
     volumes:
       - es-db:/usr/share/elasticsearch/data
     networks:
-      - internal
+      - web
 
   fastapi:
     build:
@@ -75,13 +74,11 @@ services:
       - MONGO_URI=mongodb://mongo:27017/luma
       - ELASTICSEARCH_URI=http://elasticsearch:9200
     networks:
-      - internal
+      - web
 
 networks:
   web:
     external: true
-  internal:
-    name: internal
 
 volumes:
   mongo-db:
