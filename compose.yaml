@@ -15,7 +15,7 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     environment:
       - CF_API_EMAIL=j@suhjae.dev
-      - CF_API_KEY=v1.0-11db5f5dd1714d2d084f3f65-2e5cb2c0de9df8848dcc3ce349266148f1e8d2e7c61f4576a81ca9a78d433a7b5e1ba69a75efe5f16078324af9e664e83e480998ef7faaba8195fd4875a5f8eba05bec6911ef1bc2cc
+      - CF_API_KEY=TE_wCdwLcpfEhFvdAwbaWt7HF_7Nc0bMJO6RdyWK
     ports:
       - "80:80"
       - "443:443"
