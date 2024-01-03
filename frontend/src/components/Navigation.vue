@@ -119,8 +119,14 @@ const changeBuilding = (building) => {
 }
 
 const home = () => {
-  selectedPalace.value = '0';
-  selectedBuilding.value = -1;
+  // When already on the home page, scroll to top
+  if (selectedPalace.value === '0' && selectedBuilding.value === -1) {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    return;
+  } else {
+    selectedPalace.value = '0';
+    selectedBuilding.value = -1;
+  }
 }
 
 const openSearch = () => {
