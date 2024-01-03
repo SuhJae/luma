@@ -27,8 +27,8 @@ services:
 
   mongo:
     image: mongo
-    ports:
-      - "27017:27017" # DEVELOPMENT ONLY
+#    ports:
+#      - "27017:27017" # DEVELOPMENT ONLY
     expose:
       - "27017"
     volumes:
@@ -60,8 +60,8 @@ services:
       - traefik.http.routers.fastapi.entrypoints=websecure
       - traefik.http.routers.fastapi.tls=true
       - traefik.http.routers.fastapi.tls.certresolver=myresolver
-    ports:
-      - "8000:8000" # DEVELOPMENT ONLY
+#    ports:
+#      - "8000:8000" # DEVELOPMENT ONLY
     expose:
       - "8000"
     depends_on:
