@@ -27,8 +27,8 @@ services:
 
   mongo:
     image: mongo
-    ports:
-      - "27017:27017" # DEVELOPMENT ONLY
+#    ports:
+#      - "27017:27017" # DEVELOPMENT ONLY
     expose:
       - "27017"
     volumes:
@@ -44,8 +44,8 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-    ports:
-      - "9200:9200" # DEVELOPMENT ONLY
+#    ports:
+#      - "9200:9200" # DEVELOPMENT ONLY
     expose:
       - "9200"
     volumes:
