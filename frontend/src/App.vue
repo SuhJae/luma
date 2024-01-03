@@ -110,7 +110,7 @@
 <script setup>
 import LanguageSelector from './components/LanguageSelector.vue';
 import Navigation from './components/Navigation.vue';
-const DetailModel = () => import('./components/DetailModel.vue');
+import DetailModel from './components/DetailModel.vue';
 
 import {provide, ref, computed, watch, onMounted} from 'vue';
 import {useLanguageStore} from './store/languageStore';
