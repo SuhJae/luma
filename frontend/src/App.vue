@@ -227,7 +227,8 @@ const parseUrl = async (saveHistory = true) => {
       selectedBuilding.value = index !== -1 ? index : -1;
       buildingSlug.value = index !== -1 ? urlArray[1] : '';
       showDetail.value = index !== -1;
-      document.body.style.overflow = showDetail.value ? 'hidden' : 'auto';
+      document.body.stylsudo nano /etc/ssh/sshd_config
+e.overflow = showDetail.value ? 'hidden' : 'auto';
     }
   }
   // Update the URL without pushing a new state
