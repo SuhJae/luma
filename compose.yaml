@@ -34,6 +34,8 @@ services:
     volumes:
       - mongo-db:/data/db
     restart: always
+    networks:
+      - web
 
   elasticsearch:
     build:
@@ -49,6 +51,8 @@ services:
     volumes:
       - es-db:/usr/share/elasticsearch/data
     restart: always
+    networks:
+      - web
 
   fastapi:
     build:
