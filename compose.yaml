@@ -74,6 +74,8 @@ services:
       - MONGO_URI=mongodb://mongo:27017/luma
       - ELASTICSEARCH_URI=http://elasticsearch:9200
     restart: always
+    networks:
+      - web
 
 networks:
   web:
