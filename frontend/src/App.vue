@@ -38,7 +38,7 @@
   <LanguageSelector class="z-[1] lg:z-[3]"/>
   <Navigation class="z-[3]"/>
   <DetailModel :building="buildingSlug" v-if="showDetail" @close="handleDetilClose"/>
-  <header>
+  <div>
     <!-- Landing Page Intro  -->
     <div class="hero h-[50vh]">
       <div class="hero-content text-center">
@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </div>
 
   <!-- Building Feed -->
   <nav class="flex justify-center items-center px-4">

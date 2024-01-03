@@ -1,10 +1,10 @@
 <template>
   <div class="fixed inset-x-0 top-0 p-5 flex justify-end">
-    <div class="dropdown dropdown-hover dropdown-bottom dropdown-end">
-      <div class="btn btn-circle bg-base-200 drop-shadow-lg border-none backdrop-blur-md bg-opacity-80" tabindex="0">
+    <details class="dropdown dropdown-bottom dropdown-end">
+      <summary class="btn btn-circle bg-base-200 drop-shadow-lg border-none backdrop-blur-md bg-opacity-80" tabindex="0">
         <LanguageIcon class="h-5 w-auto"/>
         <!-- <img class="h-4 w-auto hidden sm:block" alt="Flag" :src="`/src/assets/lang-icon/${lang}.svg`"> -->
-      </div>
+      </summary>
       <ul tabindex="0"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-36 backdrop-blur-md bg-opacity-80">
         <li>
@@ -25,7 +25,7 @@
                                                 alt="Flag of China">中文</p>
         </li>
       </ul>
-    </div>
+    </details>
   </div>
 </template>
 
