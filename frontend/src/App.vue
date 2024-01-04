@@ -77,14 +77,6 @@
       </div>
     </div>
   </nav>
-
-  <footer class="footer footer-center p-4 mt-12 bg-base-300 text-base-content pb-32">
-    <aside>
-      <p>Made with <span class="text-primary">♥</span> by <a href="https://twitter.com/_suhjae" target="_blank"
-                                                             class="link link-primary"
-                                                             rel="noopener noreferrer">@_SuhJae</a></p>
-    </aside>
-  </footer>
 </template>
 
 
