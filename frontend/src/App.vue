@@ -66,8 +66,14 @@
            @click="showBuildingDetail(building.url, building.palace_code)"
            @click.prevent>
         <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3">
-          <img :src="'/api/v1/media/' + building.thumbnail + '?thumbnail=true'" :alt="building.name"
-               class="w-full h-full object-cover" @load="building.imageLoaded = true">
+          <picture>
+            <source type="image" :srcset="`/api/v1/media/${building.thumbnail}?thumbnail=false`">
+            <img :src="'/api/v1/media/${building.thumbnail}?thumbnail=true'" :alt="building.name"
+                 sizes="(max-width: 640px) 100vw, 640px"
+                 class="w-full h-full object-cover" @load="building.imageLoaded = true">
+          </picture>
+
+
         </div>
         <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
           <h3 class="text-lg w-full font-semibold truncate">{{ building.name }}</h3>
