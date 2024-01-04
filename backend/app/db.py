@@ -21,6 +21,7 @@ class LumaDB:
         self.palace_db = self.db.palaces
         self.media_meta_db = self.db.media_meta
         self.media_db = gridfs.GridFS(self.db, collection="images")
+        self.thumbnail = gridfs.GridFS(self.db, collection="thumbnails")
 
     @staticmethod
     def download_file(url: str, max_retries: int = 3, retry_delay: int = 5) -> Optional[bytes]:
@@ -65,6 +66,15 @@ class LumaDB:
         file_extension = response.url.split(".")[-1]
 
         return file, file_extension
+
+    def save_thumbnail(self, image: bytes, entry_id: ObjectId) -> None:
+        self.thumbnail.put(image, _id=entry_id)
+
+    def get_thumbnail(self, entry_id: ObjectId) -> Optional[bytes]:
+        if not self.thumbnail.exists(entry_id):
+            return None
+        response = self.thumbnail.get(entry_id)
+        return response.read()
 
     def save_detailed_image(self, image: PalaceImageItem) -> ObjectId:
         saved_image = self.save_file(image.url)

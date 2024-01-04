@@ -46,13 +46,22 @@ def validate_palace_id(palace_id: str) -> Optional[int]:
 
 
 @app.get("/api/v1/media/{media_id}")
-async def get_media(request: Request, media_id: str):
+async def get_media(request: Request, media_id: str, thumbnail: bool = False):
     media_id = validate_id(media_id)
+
+    if thumbnail:
+        try:
+            media = db.get_thumbnail(media_id)
+        except TypeError:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Thumbnail not found")
+        if not media:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Thumbnail not found")
+
+        return Response(content=media, media_type="image/jpeg")
     try:
         media, file_extension = db.get_file(media_id)
     except TypeError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
-
     if not media:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
 

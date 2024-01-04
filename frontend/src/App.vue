@@ -20,7 +20,8 @@
     <meta name="description" content="Find out more about the buildings of the Joseon Dynasty."
           v-if="buildingSlug === ''"/>
 
-    <link rel="canonical" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}` + (buildingSlug !== '' ? '/' + buildingSlug : '')"
+    <link rel="canonical"
+          :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}` + (buildingSlug !== '' ? '/' + buildingSlug : '')"
           v-if="selectedPalace !== '0'"/>
 
     <!-- Link tags to other pages -->
@@ -65,7 +66,7 @@
            @click="showBuildingDetail(building.url, building.palace_code)"
            @click.prevent>
         <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3">
-          <img :src="'/api/v1/media/' + building.thumbnail" :alt="building.name" loading="eager"
+          <img :src="'/api/v1/media/' + building.thumbnail + '/?thumbnail=true'" :alt="building.name"
                class="w-full h-full object-cover" @load="building.imageLoaded = true">
         </div>
         <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
