@@ -11,7 +11,7 @@ from app.search import ElasticsearchClient
 
 db = LumaDB()
 es = ElasticsearchClient(lumaBD=db)
-app = FastAPI()
+app = FastAPI(docs_url=None, redoc_url=None)
 app.mount("/assets", StaticFiles(directory="app/static/assets"), name="assets")
 
 serviced_language = ["ko", "en", "ja", "zh"]

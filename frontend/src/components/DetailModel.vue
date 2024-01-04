@@ -87,7 +87,7 @@
     <div class="fixed top-0 left-0 w-full h-full z-[2] overflow-y-scroll px-4 backdrop-blur-lg bg-base-100/50"
          v-show="showDetail" @click.self="closeDetail">
       <transition name="bounce">
-        <div class="w-full rounded-box bg-base-100 mt-20 mb-32 h-auto relative mx-auto max-w-3xl"
+        <div class="w-full rounded-box bg-base-100 mt-20 mb-32 h-auto relative mx-auto max-w-4xl"
              v-show="showDetail">
 
           <!-- Sticky container for the close button -->
@@ -103,7 +103,7 @@
 
           <!-- Image container -->
           <header class="mb-4">
-            <figure class="h-[50vh] overflow-hidden rounded-box rounded-b-none mb-8"
+            <figure class="h-[50vh] max-h-[32rem] overflow-hidden rounded-box rounded-b-none mb-8"
                     :class="{ 'skeleton': !imageLoaded.thumbnail }">
               <img v-if="buildingData.thumbnail" :src="'/api/v1/media/' + buildingData.thumbnail"
                    :alt="buildingData.name" class="w-full h-full object-cover"

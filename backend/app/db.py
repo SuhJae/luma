@@ -217,6 +217,8 @@ class LumaDB:
                 "id": str(palace["_id"]),
                 "url": palace["url_slug"]
             })
+            # sort by alphabetically
+        return_arr.sort(key=lambda x: x["name"])
         return return_arr
 
     def get_building_random(self, language: str, palace_id: str = None, count: int = 20) -> list[dict]:
