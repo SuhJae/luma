@@ -318,6 +318,10 @@ const generateVideoMeta = () => {
   })
 }
 
+const updateTitle = () => {
+  document.title = palaceDict.value[selectedPalace.value] + ' - ' + buildingData.value.name + ' - ' + langData.title;
+}
+
 const fetchData = async (endpoint) => {
   try {
     const response = await fetch(new URL(endpoint, window.location.origin));
@@ -339,7 +343,7 @@ const fetchBuildingData = async () => {
   buildingData.value = await fetchData(window.location.origin + '/api/v1/buildingurl/?language=' + lang.value + '&building_name=' + props.building);
   await fetchDetailImages();
   await fetchDetailVideos();
-  updateMeta();
+  updateTitle();
 }
 
 const fetchDetailImages = async () => {
@@ -410,7 +414,7 @@ onMounted(() => {
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   watch([lang, buildingSlug], fetchBuildingData);
   watch(selectedPalace, closeDetail);
-  watch([buildingData, lang, selectedPalace], updateMeta);
+  watch([buildingData, lang, selectedPalace], updateTitle);
 })
 
 onUnmounted(() => {
