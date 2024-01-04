@@ -65,7 +65,7 @@
            @click="showBuildingDetail(building.url, building.palace_code)"
            @click.prevent>
         <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3">
-          <img :src="'/api/v1/media/' + building.thumbnail" :alt="building.name" loading="lazy"
+          <img :src="'/api/v1/media/' + building.thumbnail" :alt="building.name"
                class="w-full h-full object-cover" @load="building.imageLoaded = true">
         </div>
         <div class="absolute bottom-0 w-full p-4 bg-base-100/80 backdrop-blur-md">
