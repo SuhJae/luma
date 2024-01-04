@@ -21,43 +21,48 @@
         <ChevronRightIcon/>
       </div>
       <div class="flex-1" v-show="!isSearchExpanded">
-        <div class="flex-none dropdown dropdown-top">
-          <div tabindex="0" role="button" class="btn btn-ghost rounded-full px-2">
+        <details class="flex-none dropdown dropdown-top" @click="closeAllOtherDropdowns">
+          <summary tabindex="0" role="button" class="btn btn-ghost rounded-full px-2">
             <p class="text-sm font-normal overflow-hidden whitespace-nowrap overflow-ellipsis max-w-[21vw] underline">
               {{ selectedPalace === '0' ? langData.selectpalace : palaceDict[selectedPalace] }}
             </p>
-          </div>
-          <div class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200" tabindex="0">
+          </summary>
+          <div
+              class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200"
+              tabindex="0" @click="closeDropdowns">
             <li v-for="(item, key) in palaceDict" :key="key" class="max-w-52">
               <a @click=changePalace(key) :href="palaceURL[key] + '/'" @click.prevent>
                 {{ item }}
               </a>
             </li>
           </div>
-        </div>
+        </details>
       </div>
       <div class="flex-none w-5 h-5" v-show="!isSearchExpanded && selectedPalace !== '0'">
         <ChevronRightIcon/>
       </div>
       <div class="flex-1" v-show="!isSearchExpanded && selectedPalace !== '0'">
-        <div class="flex-none dropdown dropdown-top dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-ghost rounded-full px-2">
+        <details class="flex-none dropdown dropdown-top dropdown-end" @click="closeAllOtherDropdowns">
+          <summary tabindex="0" role="button" class="btn btn-ghost rounded-full px-2">
             <p class="text-sm font-normal overflow-hidden whitespace-nowrap overflow-ellipsis max-w-[21vw] underline">
               {{ selectedBuilding === -1 ? langData.selectbuilding : buildingsArray[selectedBuilding].name }}
             </p>
-          </div>
-          <div class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200" tabindex="0">
+          </summary>
+          <div
+              class="backdrop-blur-md bg-opacity-80 dropdown-content z-[1] menu p-2 shadow rounded-box w-52 max-h-[60vh] overflow-y-auto grid bg-base-200"
+              tabindex="0" @click="closeDropdowns">
             <li v-for="(item, i) in buildingsArray" :key="i" class="max-w-52">
               <a @click="changeBuilding(i)" :href="palaceURL[selectedPalace] + '/' + item.url + '/'" @click.prevent>
                 {{ item.name }}
               </a>
             </li>
           </div>
-        </div>
+        </details>
       </div>
       <div class="flex-1 w-fit">
         <!-- Normal Search Button -->
-        <button class="btn btn-ghost btn-circle px-3" v-show="!isSearchExpanded" @click="openSearch" aria-label="Open search">
+        <button class="btn btn-ghost btn-circle px-3" v-show="!isSearchExpanded" @click="openSearch"
+                aria-label="Open search">
           <MagnifyingGlassIcon class="w-6 h-6"/>
         </button>
         <!-- Expanded Search Input -->
@@ -112,7 +117,30 @@ const changeBuilding = (building) => {
   buildingSlug.value = buildingsArray.value[building].url;
 }
 
+const closeDropdowns = () => {
+  const dropdowns = document.querySelectorAll('.dropdown');
+  dropdowns.forEach(el => {
+    if (el.hasAttribute('open')) {
+      el.removeAttribute('open');
+    }
+  });
+
+
+}
+
+const closeAllOtherDropdowns = (event) => {
+  const clickedDropdown = event.currentTarget;
+  const dropdowns = document.querySelectorAll('.dropdown');
+
+  dropdowns.forEach(el => {
+    if (el !== clickedDropdown && el.hasAttribute('open')) {
+      el.removeAttribute('open');
+    }
+  });
+}
+
 const home = () => {
+  closeDropdowns();
   // When already on the home page, scroll to top
   if (selectedPalace.value === '0' && selectedBuilding.value === -1) {
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -124,6 +152,7 @@ const home = () => {
 }
 
 const openSearch = () => {
+  closeDropdowns();
   isSearchExpanded.value = true;
   nextTick(() => {
     const searchInput = document.getElementById('search');

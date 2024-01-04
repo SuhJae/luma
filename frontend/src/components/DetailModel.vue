@@ -94,7 +94,7 @@
           <div class="sticky top-0 z-10">
             <!-- Absolute positioned close button -->
             <div class="absolute right-4 top-4">
-              <button class="btn btn-circle btn-sm" @click="closeDetail">
+              <button class="btn btn-circle btn-sm" @click="closeDetail" aria-label="Close detail">
                 <XMarkIcon class="w-5 h-auto"/>
               </button>
             </div>
