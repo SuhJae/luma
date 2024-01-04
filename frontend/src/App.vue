@@ -68,7 +68,7 @@
         <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3">
           <picture>
             <source type="image" :srcset="`/api/v1/media/${building.thumbnail}?thumbnail=false`">
-            <img :src="'/api/v1/media/${building.thumbnail}?thumbnail=true'" :alt="building.name"
+            <img :src="`/api/v1/media/${building.thumbnail}?thumbnail=true`" :alt="building.name"
                  sizes="(max-width: 640px) 100vw, 640px"
                  class="w-full h-full object-cover" @load="building.imageLoaded = true">
           </picture>
