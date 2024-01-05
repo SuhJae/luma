@@ -2,30 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="preload" href="/src/main.js" as="script">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/svg+xml" href="/src/assets/logo.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Luma</title>
+    <script type="module" src="/src/main.js" defer></script>
 </head>
 <body>
 <div id="app" class="min-h-screen"></div>
-<script type="module">
-    import '/src/style.css'; // Critical CSS
-    import {createApp} from 'vue';
-    import App from '/src/App.vue';
-
-    createApp(App).mount('#app');
-
-    function loadNonCriticalCSS() {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = './font.css';
-        document.head.appendChild(link);
-    }
-
-    document.addEventListener('DOMContentLoaded', loadNonCriticalCSS);
-</script>
 <footer class="footer footer-center p-4 mt-12 bg-base-300 text-base-content pb-32">
     <aside>
         <p>Made with <span class="text-primary">♥</span> by <a href="https://twitter.com/_suhjae" target="_blank"
