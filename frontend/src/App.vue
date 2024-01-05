@@ -142,6 +142,7 @@ const palaceURL = {
 
 const fetchRandom = async () => {
   try {
+    console.log("Fetching Random Buildings. Language: " + lang.value + ", Palace: " + selectedPalace.value);
     const response = await fetch(window.location.origin + "/api/v1/random/?language=" + lang.value + "&palace_id=" + selectedPalace.value);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
