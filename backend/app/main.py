@@ -57,7 +57,7 @@ async def get_media(request: Request, media_id: str, thumbnail: bool = False):
         if not media:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Thumbnail not found")
 
-        return Response(content=media, media_type="image/jpeg")
+        return Response(content=media, media_type="image/webp")
     try:
         media, file_extension = db.get_file(media_id)
     except TypeError:

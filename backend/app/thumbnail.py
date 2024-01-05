@@ -25,9 +25,9 @@ def process_image(image_meta):
                 new_height = int(640 * aspect_ratio)
                 resized_image = image.resize((640, new_height))
 
-                # Convert to JPEG
+                # Convert to WebP
                 img_byte_arr = io.BytesIO()
-                resized_image.save(img_byte_arr, format='JPEG', quality=85)
+                resized_image.save(img_byte_arr, format='WebP', quality=80)
                 img_byte_arr = img_byte_arr.getvalue()
 
                 # Save the thumbnail
