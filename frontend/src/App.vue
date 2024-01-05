@@ -281,6 +281,10 @@ onMounted(() => {
 
   watch(lang, () => {
     console.log("Event: lang changed to " + lang.value);
+    if (selectedPalace.value === '0') {
+      buildings.value = [];
+    }
+
     fetchRandom();
     fetchBuildings();
   })
