@@ -31,6 +31,8 @@ services:
 #      - "27017:27017" # DEVELOPMENT ONLY
     expose:
       - "27017"
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-db:/data/db
     networks:
