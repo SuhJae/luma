@@ -1,4 +1,4 @@
-import {reactive, ref} from 'vue';
+import {reactive, ref, onBeforeMount} from 'vue';
 
 export const useLanguageStore = () => {
     const lang = ref('en');
