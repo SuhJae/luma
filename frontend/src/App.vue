@@ -265,9 +265,10 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 });
 document.documentElement.setAttribute('data-theme', prefersDark ? 'theRealmOfTwilightSerenity' : 'theLandofMorningCalm');
 
-parseUrl();
 
 onMounted(() => {
+  parseUrl();
+
   themeChange(true);
 
   watch(selectedPalace, () => {
