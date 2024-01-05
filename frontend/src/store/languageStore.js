@@ -1,4 +1,4 @@
-import {reactive, ref, onMounted} from 'vue';
+import {reactive, ref, onBeforeMount} from 'vue';
 
 export const useLanguageStore = () => {
     const lang = ref('en');
@@ -55,7 +55,7 @@ export const useLanguageStore = () => {
     }
 
     // On mounted
-    onMounted(() => {
+    onBeforeMount(() => {
         const storedLang = localStorage.getItem('userLanguage');
         if (storedLang) {
             lang.value = storedLang;

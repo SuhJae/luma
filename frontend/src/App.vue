@@ -246,32 +246,10 @@ const updateTitle = () => {
   }
 }
 
-watch(selectedPalace, () => {
-  updateUrl();
-  buildings.value = [];
-  fetchRandom();
-  showDetail.value = buildingSlug.value !== '';
-  document.body.style.overflow = showDetail.value ? 'hidden' : 'auto';
-})
-
-watch(lang, () => {
-  fetchRandom();
-  fetchBuildings();
-})
-
-watch(buildingSlug, () => {
-  updateUrl();
-  showDetail.value = buildingSlug.value !== '';
-  document.body.style.overflow = showDetail.value ? 'hidden' : 'auto';
-  selectedBuilding.value = buildingsArray.value.findIndex(item => item.url === buildingSlug.value);
-})
-
 // watch user nevigating manually back and forth
 window.addEventListener('popstate', () => {
   parseUrl(false);
 });
-
-watch([selectedPalace, lang], fetchBuildings, {immediate: true});
 
 // ========== Theme Management ==========
 const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -285,11 +263,33 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 });
 document.documentElement.setAttribute('data-theme', prefersDark ? 'theRealmOfTwilightSerenity' : 'theLandofMorningCalm');
 
+parseUrl();
+
 onMounted(() => {
   themeChange(true);
-});
 
-parseUrl();
+  watch([selectedPalace, lang], fetchBuildings, {immediate: true});
+
+  watch(selectedPalace, () => {
+    updateUrl();
+    buildings.value = [];
+    fetchRandom();
+    showDetail.value = buildingSlug.value !== '';
+    document.body.style.overflow = showDetail.value ? 'hidden' : 'auto';
+  })
+
+  watch(lang, () => {
+    fetchRandom();
+    fetchBuildings();
+  })
+
+  watch(buildingSlug, () => {
+    updateUrl();
+    showDetail.value = buildingSlug.value !== '';
+    document.body.style.overflow = showDetail.value ? 'hidden' : 'auto';
+    selectedBuilding.value = buildingsArray.value.findIndex(item => item.url === buildingSlug.value);
+  })
+});
 
 provide('lang', lang);
 provide('langData', langData);
