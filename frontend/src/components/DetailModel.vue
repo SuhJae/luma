@@ -103,7 +103,7 @@
 
           <!-- Image container -->
           <header class="mb-4">
-            <figure class="h-[50vh] max-h-[32rem] overflow-hidden rounded-box rounded-b-none mb-8"
+            <figure class="aspect-video max-h-[32rem] overflow-hidden rounded-box rounded-b-none mb-8"
                     :class="{ 'skeleton': !imageLoaded.thumbnail }">
               <img v-if="buildingData.thumbnail" :src="'/api/v1/media/' + buildingData.thumbnail"
                    :alt="buildingData.name" class="w-full h-full object-cover"
