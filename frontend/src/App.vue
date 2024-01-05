@@ -67,7 +67,7 @@
            @click.prevent>
         <div :class="{ 'skeleton': !building.imageLoaded }" class="w-full h-2/3">
           <picture>
-            <source type="image" :srcset="`/api/v1/media/${building.thumbnail}?thumbnail=true`" size="(max-width: 640px) 100vw">
+            <source :srcset="`/api/v1/media/${building.thumbnail}?thumbnail=true`" size="(max-width: 640px) 100vw" type="image/webp">
             <img :src="`/api/v1/media/${building.thumbnail}`" :alt="building.name"
                  class="w-full h-full object-cover" @load="building.imageLoaded = true">
           </picture>
