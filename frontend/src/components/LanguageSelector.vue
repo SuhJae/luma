@@ -8,20 +8,20 @@
       <ul tabindex="0"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-36 backdrop-blur-md bg-opacity-80">
         <li>
-          <p @click="changeLanguage('ko')"><img class="h-4 w-auto" src="/src/assets/lang-icon/ko.svg" role="button"
+          <p @click="changeLanguage('ko')"><img class="h-4 w-auto" src="/src/assets/lang-icon/ko.svg" role="button" loading="lazy"
                                                 alt="Flag of South Korea">한국어</p>
         </li>
         <li>
-          <p @click="changeLanguage('en')"><img class="h-4 w-auto" src="/src/assets/lang-icon/en.svg" role="button"
+          <p @click="changeLanguage('en')"><img class="h-4 w-auto" src="/src/assets/lang-icon/en.svg" role="button" loading="lazy"
                                                 alt="Flag of USA">English
           </p>
         </li>
         <li>
-          <p @click="changeLanguage('ja')"><img class="h-4 w-auto" src="/src/assets/lang-icon/ja.svg" role="button"
+          <p @click="changeLanguage('ja')"><img class="h-4 w-auto" src="/src/assets/lang-icon/ja.svg" role="button" loading="lazy"
                                                 alt="Flag of Japan">日本語</p>
         </li>
         <li>
-          <p @click="changeLanguage('zh')"><img class="h-4 w-auto" src="/src/assets/lang-icon/zh.svg" role="button"
+          <p @click="changeLanguage('zh')"><img class="h-4 w-auto" src="/src/assets/lang-icon/zh.svg" role="button" loading="lazy"
                                                 alt="Flag of China">中文</p>
         </li>
       </ul>
