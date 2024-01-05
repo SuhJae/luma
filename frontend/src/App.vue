@@ -107,15 +107,16 @@
 
 
 <script setup>
+const {lang, langData, changeLanguage} = useLanguageStore();
+import {useLanguageStore} from './store/languageStore';
+
 import LanguageSelector from './components/LanguageSelector.vue';
 import Navigation from './components/Navigation.vue';
 import DetailModel from './components/DetailModel.vue';
 
 import {provide, ref, computed, watch, onMounted} from 'vue';
-import {useLanguageStore} from './store/languageStore';
 import {themeChange} from 'theme-change'
 
-const {lang, langData, changeLanguage} = useLanguageStore();
 const buildings = ref([]);
 const showDetail = ref(false);
 const buildingSlug = ref('');
@@ -147,6 +148,7 @@ const fetchRandom = async () => {
     }
     const data = await response.json(); // Correctly parsing JSON
     buildings.value = data;
+    console.log("Fetched Random Buildings");
   } catch (error) {
     console.error("Error in fetchRandom:", error);
   }
@@ -205,7 +207,7 @@ const fetchBuildings = async () => {
     }
     const data = await response.json();
     buildingsArray.value = data;
-    console.log("Buildings Array:", buildingsArray.value);
+    console.log("Fetched Buildings for " + selectedPalace.value + ":", data);
     selectedBuilding.value = buildingsArray.value.findIndex(item => item.url === buildingSlug.value);
   } catch (error) {
     console.error("Error in fetchBuildings:", error);
@@ -268,9 +270,8 @@ parseUrl();
 onMounted(() => {
   themeChange(true);
 
-  watch([selectedPalace, lang], fetchBuildings, {immediate: true});
-
   watch(selectedPalace, () => {
+    console.log("Event: selectedPalace changed to " + selectedPalace.value);
     updateUrl();
     buildings.value = [];
     fetchRandom();
@@ -279,11 +280,13 @@ onMounted(() => {
   })
 
   watch(lang, () => {
+    console.log("Event: lang changed to " + lang.value);
     fetchRandom();
     fetchBuildings();
   })
 
   watch(buildingSlug, () => {
+    console.log("Event: buildingSlug changed to " + buildingSlug.value);
     updateUrl();
     showDetail.value = buildingSlug.value !== '';
     document.body.style.overflow = showDetail.value ? 'hidden' : 'auto';

@@ -25,6 +25,7 @@ export const useLanguageStore = () => {
                 lang.value = 'en';
             }
         }
+        console.log("Using auto detected language:", lang.value);
     }
 
     // Function to fetch language configuration
@@ -36,9 +37,9 @@ export const useLanguageStore = () => {
             }
             const responseData = await response.json(); // Parsing the JSON response
             Object.assign(langData, responseData); // Correctly updating langData with parsed JSON
-            console.log("Language config:", langData);
+            console.log("Fetched language config:", lang.value);
         } catch (error) {
-            console.error("Error fetching language config:", error);
+            console.error("Error while fetching language config:", error);
         }
     };
 
@@ -48,6 +49,7 @@ export const useLanguageStore = () => {
     }
     const changeLanguage = (newLang) => {
         if (newLang !== lang.value) {
+            console.log("Changing language to:", newLang);
             lang.value = newLang;
             fetchLanguageConfig();
             saveLanguageToLocalStorage(newLang);
@@ -59,6 +61,7 @@ export const useLanguageStore = () => {
         const storedLang = localStorage.getItem('userLanguage');
         if (storedLang) {
             lang.value = storedLang;
+            console.log("Using stored language:", lang.value);
         } else {
             detectBrowserLanguage();
         }
