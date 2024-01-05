@@ -22,8 +22,8 @@ def process_image(image_meta):
 
                 # Resize the image
                 aspect_ratio = image.height / image.width
-                new_height = int(640 * aspect_ratio)
-                resized_image = image.resize((640, new_height))
+                new_height = int(480 * aspect_ratio)
+                resized_image = image.resize((480, new_height))
 
                 # Convert to WebP
                 img_byte_arr = io.BytesIO()
