@@ -200,6 +200,16 @@ class LumaDB:
             "detail_video": [str(video) for video in result["detail_video"]],
         }
 
+    @staticmethod
+    def building_mongo_to_preview(result: dict, language: str) -> dict:
+        return {
+            "name": result["name"][language],
+            "url": result["url_slug"],
+            "palace_code": result["palace_code"],
+            "explanation": result["explanation"][language],
+            "thumbnail": str(result["thumbnail"]),
+        }
+
     def get_building(self, palace_id: ObjectId, language: str) -> Optional[dict]:
         result = self.palace_db.find_one({"_id": palace_id})
 
@@ -235,7 +245,7 @@ class LumaDB:
         if palace_id:
             # get all buildings with the same palace_code and sort by detail_code
             result = self.palace_db.find({"palace_code": int(palace_id)}).sort("detail_code", 1)
-            return [self.building_mongo_to_dict(palace, language) for palace in result]
+            return [self.building_mongo_to_preview(palace, language) for palace in result]
         else:
             result = self.palace_db.aggregate(
                 [
@@ -243,4 +253,4 @@ class LumaDB:
                 ]
             )
 
-        return [self.building_mongo_to_dict(palace, language) for palace in result]
+        return [self.building_mongo_to_preview(palace, language) for palace in result]
