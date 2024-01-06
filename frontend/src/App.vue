@@ -24,6 +24,11 @@
           :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}` + (buildingSlug !== '' ? '/' + buildingSlug : '')"
           v-if="selectedPalace !== '0'"/>
 
+    <link rel="apple-touch-icon" href="/src/assets/apple-touch-icon.png">
+    <link rel="apple-touch-startup-image" href="/src/assets/lunch.png">
+    <meta name="apple-mobile-web-app-title" content="Luma">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <!-- Link tags to other pages -->
     <link rel="alternate" hreflang="ko" :href="`https://luma.joseon.space/${palaceURL[selectedPalace]}`"
           v-if="selectedPalace !== '0' && lang !== 'ko' && buildingSlug === ''"/>

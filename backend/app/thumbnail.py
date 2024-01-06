@@ -1,7 +1,6 @@
 import io
 import csv
 from PIL import Image
-from multiprocessing import Pool, cpu_count
 from db import LumaDB
 
 # Initialize database
