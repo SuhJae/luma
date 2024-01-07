@@ -1,0 +1,76 @@
+version: "3.7"
+
+services:
+  traefik:
+    image: traefik:v2.5
+    command:
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - web
+
+  mongo:
+    image: mongo
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-db:/data/db
+    networks:
+      - web
+    restart: always
+
+  elasticsearch:
+    build:
+      context: elasticsearch
+      dockerfile: Dockerfile
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    expose:
+      - "9200"
+    volumes:
+      - es-db:/usr/share/elasticsearch/data
+    networks:
+      - web
+    restart: always
+
+  fastapi:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fastapi.rule=Host(`localhost`) && PathPrefix(`/api/v1`)
+      - traefik.http.middlewares.fastapi-stripprefix.stripprefix.prefixes=/api/v1
+      - traefik.http.routers.fastapi.middlewares=fastapi-stripprefix
+      - traefik.http.services.fastapi.loadbalancer.server.port=8000
+    expose:
+      - "8000"
+    depends_on:
+      - mongo
+      - elasticsearch
+      - traefik
+    volumes:
+      - ./backend:/app
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/luma
+      - ELASTICSEARCH_URI=http://elasticsearch:9200
+    networks:
+      - web
+    restart: always
+
+volumes:
+  mongo-db:
+  es-db:
+
+networks:
+  web:
+    external: true

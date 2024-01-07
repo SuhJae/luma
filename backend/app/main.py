@@ -6,18 +6,18 @@ import bson.errors
 from typing import Optional
 import json
 
-from app.db import LumaDB
-from app.search import ElasticsearchClient
+from db import LumaDB
+from search import ElasticsearchClient
 
 db = LumaDB()
 es = ElasticsearchClient(lumaBD=db)
 app = FastAPI(docs_url=None, redoc_url=None)
-app.mount("/assets", StaticFiles(directory="app/static/assets"), name="assets")
+app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
 
 serviced_language = ["ko", "en", "ja", "zh"]
 ui_language = {}
 for lang in serviced_language:
-    with open(f"app/assets/lang/{lang}.json", "r", encoding="utf-8") as f:
+    with open(f"assets/lang/{lang}.json", "r", encoding="utf-8") as f:
         ui_language[lang] = json.load(f)
 
 
@@ -45,7 +45,7 @@ def validate_palace_id(palace_id: str) -> Optional[int]:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid palace id")
 
 
-@app.get("/api/v1/media/{media_id}")
+@app.get("/media/{media_id}")
 async def get_media(request: Request, media_id: str, thumbnail: bool = False):
     media_id = validate_id(media_id)
 
@@ -101,7 +101,7 @@ async def partial_file_response(data: bytes, range_header: str, media_type: str)
                     headers=headers)
 
 
-@app.get("/api/v1/photo/")
+@app.get("/photo/")
 def get_photo(photo_id: str, language: str):
     validate_language(language)
     photo_id = validate_id(photo_id)
@@ -112,7 +112,7 @@ def get_photo(photo_id: str, language: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
 
 
-@app.get("/api/v1/video/")
+@app.get("/video/")
 def get_video(video_id: str, language: str):
     validate_language(language)
     video_id = validate_id(video_id)
@@ -123,7 +123,7 @@ def get_video(video_id: str, language: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Video not found")
 
 
-@app.get("/api/v1/building/")
+@app.get("/building/")
 def get_palace(building_id: str, language: str):
     validate_language(language)
     building_id = validate_id(building_id)
@@ -134,7 +134,7 @@ def get_palace(building_id: str, language: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Palace not found")
 
 
-@app.get("/api/v1/buildingurl/")
+@app.get("/buildingurl/")
 def get_palace_url(building_name: str, language: str):
     validate_language(language)
     if len(building_name) > 100:
@@ -146,7 +146,7 @@ def get_palace_url(building_name: str, language: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Palace not found")
 
 
-@app.get("/api/v1/search/")
+@app.get("/search/")
 def search(keyword: str, language: str, palace_id: str = None, cursor: int = 1):
     validate_language(language)
     # check for malicious keyword
@@ -173,7 +173,7 @@ def search(keyword: str, language: str, palace_id: str = None, cursor: int = 1):
     return response
 
 
-@app.get("/api/v1/autocomplete/")
+@app.get("/autocomplete/")
 def autocomplete(keyword: str, language: str):
     validate_language(language)
     # check for malicious keyword
@@ -195,7 +195,7 @@ def autocomplete(keyword: str, language: str):
     return response
 
 
-@app.get("/api/v1/random/")
+@app.get("/random/")
 def random_article(language: str, palace_id: str = None):
     if palace_id == "0":
         palace_id = None
@@ -209,13 +209,13 @@ def random_article(language: str, palace_id: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No article found")
 
 
-@app.get("/api/v1/languages/")
+@app.get("/languages/")
 async def get_languages(language: str):
     validate_language(language)
     return JSONResponse(content=ui_language[language], status_code=status.HTTP_200_OK)
 
 
-@app.get("/api/v1/buildings/")
+@app.get("/buildings/")
 async def get_palace_elements(palace_id: str, language: str):
     validate_language(language)
     palace_id = validate_palace_id(palace_id)
@@ -224,21 +224,3 @@ async def get_palace_elements(palace_id: str, language: str):
         return palace_elements
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No palace elements found")
-
-
-# SPA catch-all endpoint
-@app.get("/{catchall:path}")
-async def spa_route(catchall: str):
-    # Ignore API paths
-    if catchall.startswith("api/"):
-        raise HTTPException(status_code=404, detail="Not Found")
-    # provide logo.png and sw.js
-    elif catchall == "logo.png":
-        return FileResponse('app/static/logo.png')
-    elif catchall == "sw.js":
-        return FileResponse('app/static/sw.js')
-    elif catchall == "robots.txt":
-        return FileResponse('app/static/robots.txt')
-
-    # Serve SPA for non-API requests
-    return FileResponse('app/static/index.html')

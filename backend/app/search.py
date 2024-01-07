@@ -3,7 +3,7 @@ from bson.objectid import ObjectId
 import re
 import os
 
-from app.db import LumaDB
+from db import LumaDB
 
 
 class ElasticsearchClient:

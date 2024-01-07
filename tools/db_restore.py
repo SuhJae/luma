@@ -59,7 +59,11 @@ def main():
     print("Starting MongoDB restore...")
     subprocess.run(mongodb_restore_cmd, shell=True, check=True)
 
-    print("Restore completed successfully.")
+    # Remove the backup file from the container
+    print("Removing backup file from the container...")
+    subprocess.run(f"docker exec {mongo_container} rm /data/db/backup.archive", shell=True, check=True)
+
+    print("Done.")
 
 
 if __name__ == "__main__":
