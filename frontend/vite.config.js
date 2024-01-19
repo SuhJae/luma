@@ -10,5 +10,14 @@ export default defineConfig({
         outDir: resolve(__dirname, '../backend/app/static'),
         // This will empty the outDir folder before building
         emptyOutDir: true,
+    },
+    server: {
+        proxy: {
+            '/api/v1': {
+                target: 'http://localhost:8000', // FastAPI server
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api\/v1/, '')
+            }
+        }
     }
 })
