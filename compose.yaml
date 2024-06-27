@@ -4,7 +4,7 @@ services:
   traefik:
     image: traefik:v2.5
     command:
-      - --api.insecure=true
+      - --api.insecure=false
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
@@ -19,7 +19,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+#      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./letsencrypt:/letsencrypt
@@ -28,12 +28,10 @@ services:
 
   mongo:
     image: mongo
-#    ports:
-#      - "27017:27017" # DEVELOPMENT ONLY
     expose:
       - "27017"
-    ports:
-      - "27017:27017"
+#    ports:
+#      - "27017:27017"
     volumes:
       - mongo-db:/data/db
     networks:
