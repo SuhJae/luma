@@ -4,7 +4,7 @@ services:
   traefik:
     image: traefik:v2.5
     command:
-      - --api.insecure=false
+      - --api.insecure=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
@@ -13,12 +13,13 @@ services:
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.myresolver.acme.email=j@suhjae.dev
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-    environment:
-      - CF_API_EMAIL=j@suhjae.dev
-      - CF_API_KEY=z5qk6oEuPvWwqvAJO5B51abM3s-cwYWo4ovnutoX
+#    environment:
+#      - CF_API_EMAIL=j@suhjae.dev
+#      - CF_API_KEY=z5qk6oEuPvWwqvAJO5B51abM3s-cwYWo4ovnutoX
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./letsencrypt:/letsencrypt
